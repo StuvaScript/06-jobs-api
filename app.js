@@ -7,13 +7,14 @@ const authRouter = require("./routes/auth");
 const exercisesRouter = require("./routes/exercises");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
+const authenticateUser = require("./middleware/authentication");
 
 //* **`` Middleware ``**
 app.use(express.json());
 
 //* **`` Routes ``**
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/exercises", exercisesRouter);
+app.use("/api/v1/exercises", authenticateUser, exercisesRouter);
 
 //* **`` Error Handlers ``**
 app.use(notFoundMiddleware);

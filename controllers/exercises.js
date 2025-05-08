@@ -7,7 +7,7 @@ const getExercise = async (req, res) => {
 };
 
 const createExercise = async (req, res) => {
-  res.send("create exercise");
+  res.json(req.user);
 };
 
 const updateExercise = async (req, res) => {
