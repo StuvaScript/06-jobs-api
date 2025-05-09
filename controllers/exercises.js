@@ -1,5 +1,12 @@
+const Exercise = require("../models/Exercise");
+const { StatusCodes } = require("http-status-codes");
+const { BadRequestError, NotFoundError } = require("../errors");
+
 const getAllExercises = async (req, res) => {
-  res.send("get all exercises");
+  const exercises = await Exercise.find({ createdBy: req.user.userId }).sort(
+    "createdAt"
+  );
+  res.status(StatusCodes.OK).json({ exercises, count: exercises.length });
 };
 
 const getExercise = async (req, res) => {
@@ -7,7 +14,9 @@ const getExercise = async (req, res) => {
 };
 
 const createExercise = async (req, res) => {
-  res.json(req.user);
+  req.body.createdBy = req.user.userId;
+  const exercise = await Exercise.create(req.body);
+  res.status(StatusCodes.CREATED).json({ exercise });
 };
 
 const updateExercise = async (req, res) => {
