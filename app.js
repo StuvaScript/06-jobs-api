@@ -9,6 +9,8 @@ const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const authenticateUser = require("./middleware/authentication");
 
+require("./lib/env-vars");
+
 //* **`` Middleware ``**
 app.use(express.json());
 
