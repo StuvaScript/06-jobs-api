@@ -1,5 +1,6 @@
 require("dotenv").config();
 require("express-async-errors");
+require("./lib/env-vars-checker");
 const express = require("express");
 const app = express();
 const connectDB = require("./db/connect");
@@ -8,8 +9,6 @@ const exercisesRouter = require("./routes/exercises");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const authenticateUser = require("./middleware/authentication");
-
-require("./lib/env-vars");
 
 //* **`` Middleware ``**
 app.use(express.json());
