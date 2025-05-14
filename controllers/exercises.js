@@ -35,7 +35,7 @@ const createExercise = async (req, res) => {
 
 const updateExercise = async (req, res) => {
   const {
-    body: { name, sets, reps, measurement, measurementUnit },
+    body: { name, measurement, measurementUnit },
     user: { userId },
     params: { id: exerciseId },
   } = req;
