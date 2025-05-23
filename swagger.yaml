@@ -1,0 +1,236 @@
+openapi: 3.0.0
+info:
+  title: Jobs API
+  contact: {}
+  version: "1.0"
+servers:
+  - url: https://exercises-api-stu.onrender.com/api/v1
+    variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      operationId: RegisterUser
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUserRequest"
+            example:
+              name: stu
+              email: stu@gmail.com
+              password: secret
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login User
+      operationId: LoginUser
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUserRequest"
+            example:
+              email: stu@gmail.com
+              password: secret
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security: []
+  /exercises:
+    post:
+      tags:
+        - Exercises
+      summary: Create Exercise
+      operationId: CreateExercise
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateExerciseRequest"
+            example:
+              name: bench press
+              sets: 4
+              reps: 10
+              measurement: 75
+              measurementUnit: lbs
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+        - Exercises
+      summary: Get All Exercises
+      operationId: GetAllExercises
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+  /exercises/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The exercise ID
+    get:
+      tags:
+        - Exercises
+      summary: Get Single Exercise
+      operationId: GetSingleExercise
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+
+    patch:
+      tags:
+        - Exercises
+      summary: Update Exercise
+      operationId: UpdateExercise
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateExerciseRequest"
+            example:
+              name: sit ups
+              sets: 2
+              reps: 20
+              measurement: 0
+              measurementUnit: bodyweight
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - Exercises
+      summary: Delete Exercise
+      operationId: DeleteExercise
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    RegisterUserRequest:
+      title: RegisterUserRequest
+      required:
+        - name
+        - email
+        - password
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: stu
+        email: stu@gmail.com
+        password: secret
+    LoginUserRequest:
+      title: LoginUserRequest
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: stu@gmail.com
+        password: secret
+    CreateExerciseRequest:
+      title: CreateExerciseRequest
+      required:
+        - name
+        - measurement
+        - measurementUnit
+      type: object
+      properties:
+        name:
+          type: string
+        sets:
+          type: number
+        reps:
+          type: number
+        measurement:
+          type: number
+        measurementUnit:
+          type: string
+      example:
+        name: bench press
+        sets: 3
+        reps: 10
+        measurement: 50
+        measurementUnit: lbs
+    UpdateExerciseRequest:
+      title: UpdateExerciseRequest
+      type: object
+      properties:
+        name:
+          type: string
+        sets:
+          type: number
+        reps:
+          type: number
+        measurement:
+          type: number
+        measurementUnit:
+          type: string
+      example:
+        name: barbell curl
+        sets: 2
+        reps: 12
+        measurement: 12.5
+        measurementUnit: lbs
+  securitySchemes:
+    httpBearer:
+      type: http
+      scheme: bearer
+security:
+  - httpBearer: []
+tags:
+  - name: Auth
+    description: ""
+  - name: Exercises
+    description: ""
