@@ -72,7 +72,7 @@ const deleteExercise = async (req, res) => {
     throw new NotFoundError(`No exercise with id ${exerciseId}`);
   }
 
-  res.status(StatusCodes.OK).send();
+  res.status(StatusCodes.OK).json({ msg: "The entry was deleted." });
 };
 
 module.exports = {

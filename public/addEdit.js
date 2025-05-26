@@ -2,12 +2,13 @@ import { enableInput, inputEnabled, message, setDiv, token } from "./index.js";
 import { showJobs } from "./jobs.js";
 
 let addEditDiv = null;
-let company = null;
-let position = null;
-let status = null;
+let exercise = null;
+let sets = null;
+let reps = null;
+let measurement = null;
+let measurementUnit = null;
 let addingJob = null;
 
-// !!  **`` Error is below ``**
 export const handleAddEdit = () => {
   addEditDiv = document.getElementById("edit-job");
   exercise = document.getElementById("exercise");
@@ -25,6 +26,12 @@ export const handleAddEdit = () => {
 
         let method = "POST";
         let url = "/api/v1/exercises";
+
+        if (addingJob.textContent === "update") {
+          method = "PATCH";
+          url = `/api/v1/exercises/${addEditDiv.dataset.id}`;
+        }
+
         try {
           const response = await fetch(url, {
             method: method,
@@ -33,22 +40,29 @@ export const handleAddEdit = () => {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              company: company.value,
-              position: position.value,
-              status: status.value,
+              name: exercise.value,
+              sets: sets.value,
+              reps: reps.value,
+              measurement: measurement.value,
+              measurementUnit: measurementUnit.value,
             }),
           });
 
           const data = await response.json();
-          if (response.status === 201) {
-            // 201 indicates a successful create
-            message.textContent = "The job entry was created.";
+          if (response.status === 200 || response.status === 201) {
+            if (response.status === 200) {
+              // a 200 is expected for a successful update
+              message.textContent = "The job entry was updated.";
+            } else {
+              // a 201 is expected for a successful create
+              message.textContent = "The job entry was created.";
+            }
+
             exercise.value = "";
             sets.value = "";
             reps.value = "";
             measurement.value = "";
             measurementUnit.value = "";
-
             showJobs();
           } else {
             message.textContent = data.msg;
@@ -57,7 +71,6 @@ export const handleAddEdit = () => {
           console.log(err);
           message.textContent = "A communication error occurred.";
         }
-
         enableInput(true);
       } else if (e.target === editCancel) {
         message.textContent = "";
@@ -82,7 +95,7 @@ export const showAddEdit = async (jobId) => {
     enableInput(false);
 
     try {
-      const response = await fetch(`/api/v1/jobs/${jobId}`, {
+      const response = await fetch(`/api/v1/exercises/${jobId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -92,11 +105,11 @@ export const showAddEdit = async (jobId) => {
 
       const data = await response.json();
       if (response.status === 200) {
-        exercise.value = data.job.name;
-        sets.value = data.job.sets;
-        reps.value = data.job.reps;
-        measurement.value = data.job.measurement;
-        measurementUnit.value = data.job.measurementUnit;
+        exercise.value = data.exercise.name;
+        sets.value = data.exercise.sets;
+        reps.value = data.exercise.reps;
+        measurement.value = data.exercise.measurement;
+        measurementUnit.value = data.exercise.measurementUnit;
         addingJob.textContent = "update";
         message.textContent = "";
         addEditDiv.dataset.id = jobId;

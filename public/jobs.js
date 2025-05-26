@@ -53,7 +53,6 @@ export const showJobs = async () => {
     });
 
     const data = await response.json();
-    console.log("data:", data);
     let children = [jobsTableHeader];
 
     if (response.status === 200) {
