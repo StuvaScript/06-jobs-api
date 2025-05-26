@@ -8,6 +8,7 @@ import {
 } from "./index.js";
 import { showLoginRegister } from "./loginRegister.js";
 import { showAddEdit } from "./addEdit.js";
+import { deleteExercise } from "./delete.js";
 
 let jobsDiv = null;
 let jobsTable = null;
@@ -24,6 +25,8 @@ export const handleJobs = () => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
       if (e.target === addJob) {
         showAddEdit(null);
+      } else if (e.target.classList.contains("deleteButton")) {
+        deleteExercise(e.target.dataset.id);
       } else if (e.target === logoff) {
         setToken(null);
 
@@ -70,7 +73,8 @@ export const showJobs = async () => {
             <td>${data.exercises[i].reps}</td>
             <td>${data.exercises[i].measurement}</td>
             <td>${data.exercises[i].measurementUnit}</td>
-            <div>${editButton}${deleteButton}</div>`;
+            ${editButton}
+            ${deleteButton}`;
 
           rowEntry.innerHTML = rowHTML;
           children.push(rowEntry);
