@@ -7,11 +7,14 @@ let position = null;
 let status = null;
 let addingJob = null;
 
+// !!  **`` Error is below ``**
 export const handleAddEdit = () => {
   addEditDiv = document.getElementById("edit-job");
-  company = document.getElementById("company");
-  position = document.getElementById("position");
-  status = document.getElementById("status");
+  exercise = document.getElementById("exercise");
+  sets = document.getElementById("sets");
+  reps = document.getElementById("reps");
+  measurement = document.getElementById("measurement");
+  measurementUnit = document.getElementById("measurementUnit");
   addingJob = document.getElementById("adding-job");
   const editCancel = document.getElementById("edit-cancel");
 
@@ -21,7 +24,7 @@ export const handleAddEdit = () => {
         enableInput(false);
 
         let method = "POST";
-        let url = "/api/v1/jobs";
+        let url = "/api/v1/exercises";
         try {
           const response = await fetch(url, {
             method: method,
@@ -40,10 +43,11 @@ export const handleAddEdit = () => {
           if (response.status === 201) {
             // 201 indicates a successful create
             message.textContent = "The job entry was created.";
-
-            company.value = "";
-            position.value = "";
-            status.value = "pending";
+            exercise.value = "";
+            sets.value = "";
+            reps.value = "";
+            measurement.value = "";
+            measurementUnit.value = "";
 
             showJobs();
           } else {
@@ -63,7 +67,52 @@ export const handleAddEdit = () => {
   });
 };
 
-export const showAddEdit = (job) => {
-  message.textContent = "";
-  setDiv(addEditDiv);
+export const showAddEdit = async (jobId) => {
+  if (!jobId) {
+    exercise.value = "";
+    sets.value = "";
+    reps.value = "";
+    measurement.value = "";
+    measurementUnit.value = "";
+    addingJob.textContent = "add";
+    message.textContent = "";
+
+    setDiv(addEditDiv);
+  } else {
+    enableInput(false);
+
+    try {
+      const response = await fetch(`/api/v1/jobs/${jobId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (response.status === 200) {
+        exercise.value = data.job.name;
+        sets.value = data.job.sets;
+        reps.value = data.job.reps;
+        measurement.value = data.job.measurement;
+        measurementUnit.value = data.job.measurementUnit;
+        addingJob.textContent = "update";
+        message.textContent = "";
+        addEditDiv.dataset.id = jobId;
+
+        setDiv(addEditDiv);
+      } else {
+        // might happen if the list has been updated since last display
+        message.textContent = "The jobs entry was not found";
+        showJobs();
+      }
+    } catch (err) {
+      console.log(err);
+      message.textContent = "A communications error has occurred.";
+      showJobs();
+    }
+
+    enableInput(true);
+  }
 };
