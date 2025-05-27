@@ -10,20 +10,20 @@ import { showLoginRegister } from "./loginRegister.js";
 import { showAddEdit } from "./addEdit.js";
 import { deleteExercise } from "./delete.js";
 
-let jobsDiv = null;
-let jobsTable = null;
-let jobsTableHeader = null;
+let exercisesDiv = null;
+let exercisesTable = null;
+let exercisesTableHeader = null;
 
-export const handleJobs = () => {
-  jobsDiv = document.getElementById("jobs");
+export const handleExercises = () => {
+  exercisesDiv = document.getElementById("exercises");
   const logoff = document.getElementById("logoff");
-  const addJob = document.getElementById("add-job");
-  jobsTable = document.getElementById("jobs-table");
-  jobsTableHeader = document.getElementById("jobs-table-header");
+  const addExercise = document.getElementById("add-exercise");
+  exercisesTable = document.getElementById("exercises-table");
+  exercisesTableHeader = document.getElementById("exercises-table-header");
 
-  jobsDiv.addEventListener("click", (e) => {
+  exercisesDiv.addEventListener("click", (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
-      if (e.target === addJob) {
+      if (e.target === addExercise) {
         showAddEdit(null);
       } else if (e.target.classList.contains("deleteButton")) {
         deleteExercise(e.target.dataset.id);
@@ -32,7 +32,7 @@ export const handleJobs = () => {
 
         message.textContent = "You have been logged off.";
 
-        jobsTable.replaceChildren([jobsTableHeader]);
+        exercisesTable.replaceChildren([exercisesTableHeader]);
 
         showLoginRegister();
       } else if (e.target.classList.contains("editButton")) {
@@ -43,7 +43,7 @@ export const handleJobs = () => {
   });
 };
 
-export const showJobs = async () => {
+export const showExercises = async () => {
   try {
     enableInput(false);
 
@@ -56,11 +56,11 @@ export const showJobs = async () => {
     });
 
     const data = await response.json();
-    let children = [jobsTableHeader];
+    let children = [exercisesTableHeader];
 
     if (response.status === 200) {
       if (data.count === 0) {
-        jobsTable.replaceChildren(...children); // clear this for safety
+        exercisesTable.replaceChildren(...children); // clear this for safety
       } else {
         for (let i = 0; i < data.exercises.length; i++) {
           let rowEntry = document.createElement("tr");
@@ -79,7 +79,7 @@ export const showJobs = async () => {
           rowEntry.innerHTML = rowHTML;
           children.push(rowEntry);
         }
-        jobsTable.replaceChildren(...children);
+        exercisesTable.replaceChildren(...children);
       }
     } else {
       message.textContent = data.msg;
@@ -89,5 +89,5 @@ export const showJobs = async () => {
     message.textContent = "A communication error occurred.";
   }
   enableInput(true);
-  setDiv(jobsDiv);
+  setDiv(exercisesDiv);
 };

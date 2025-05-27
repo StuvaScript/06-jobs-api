@@ -1,5 +1,5 @@
 import { enableInput, inputEnabled, message, setDiv, token } from "./index.js";
-import { showJobs } from "./jobs.js";
+import { showExercises } from "./exercises.js";
 
 let addEditDiv = null;
 let exercise = null;
@@ -7,27 +7,27 @@ let sets = null;
 let reps = null;
 let measurement = null;
 let measurementUnit = null;
-let addingJob = null;
+let addingExercise = null;
 
 export const handleAddEdit = () => {
-  addEditDiv = document.getElementById("edit-job");
+  addEditDiv = document.getElementById("edit-exercise");
   exercise = document.getElementById("exercise");
   sets = document.getElementById("sets");
   reps = document.getElementById("reps");
   measurement = document.getElementById("measurement");
   measurementUnit = document.getElementById("measurementUnit");
-  addingJob = document.getElementById("adding-job");
+  addingExercise = document.getElementById("adding-exercise");
   const editCancel = document.getElementById("edit-cancel");
 
   addEditDiv.addEventListener("click", async (e) => {
     if (inputEnabled && e.target.nodeName === "BUTTON") {
-      if (e.target === addingJob) {
+      if (e.target === addingExercise) {
         enableInput(false);
 
         let method = "POST";
         let url = "/api/v1/exercises";
 
-        if (addingJob.textContent === "update") {
+        if (addingExercise.textContent === "update") {
           method = "PATCH";
           url = `/api/v1/exercises/${addEditDiv.dataset.id}`;
         }
@@ -52,10 +52,10 @@ export const handleAddEdit = () => {
           if (response.status === 200 || response.status === 201) {
             if (response.status === 200) {
               // a 200 is expected for a successful update
-              message.textContent = "The job entry was updated.";
+              message.textContent = "The exercise entry was updated.";
             } else {
               // a 201 is expected for a successful create
-              message.textContent = "The job entry was created.";
+              message.textContent = "The exercise entry was created.";
             }
 
             exercise.value = "";
@@ -63,7 +63,7 @@ export const handleAddEdit = () => {
             reps.value = "";
             measurement.value = "";
             measurementUnit.value = "";
-            showJobs();
+            showExercises();
           } else {
             message.textContent = data.msg;
           }
@@ -74,20 +74,20 @@ export const handleAddEdit = () => {
         enableInput(true);
       } else if (e.target === editCancel) {
         message.textContent = "";
-        showJobs();
+        showExercises();
       }
     }
   });
 };
 
-export const showAddEdit = async (jobId) => {
-  if (!jobId) {
+export const showAddEdit = async (exerciseId) => {
+  if (!exerciseId) {
     exercise.value = "";
     sets.value = "";
     reps.value = "";
     measurement.value = "";
     measurementUnit.value = "";
-    addingJob.textContent = "add";
+    addingExercise.textContent = "add";
     message.textContent = "";
 
     setDiv(addEditDiv);
@@ -95,7 +95,7 @@ export const showAddEdit = async (jobId) => {
     enableInput(false);
 
     try {
-      const response = await fetch(`/api/v1/exercises/${jobId}`, {
+      const response = await fetch(`/api/v1/exercises/${exerciseId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -110,20 +110,20 @@ export const showAddEdit = async (jobId) => {
         reps.value = data.exercise.reps;
         measurement.value = data.exercise.measurement;
         measurementUnit.value = data.exercise.measurementUnit;
-        addingJob.textContent = "update";
+        addingExercise.textContent = "update";
         message.textContent = "";
-        addEditDiv.dataset.id = jobId;
+        addEditDiv.dataset.id = exerciseId;
 
         setDiv(addEditDiv);
       } else {
         // might happen if the list has been updated since last display
-        message.textContent = "The jobs entry was not found";
-        showJobs();
+        message.textContent = "The exercise entry was not found";
+        showExercises();
       }
     } catch (err) {
       console.log(err);
       message.textContent = "A communications error has occurred.";
-      showJobs();
+      showExercises();
     }
 
     enableInput(true);

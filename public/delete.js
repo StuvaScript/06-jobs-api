@@ -1,5 +1,5 @@
 import { enableInput, message, token } from "./index.js";
-import { showJobs } from "./jobs.js";
+import { showExercises } from "./exercises.js";
 export const deleteExercise = async (id) => {
   enableInput(false);
 
@@ -16,7 +16,7 @@ export const deleteExercise = async (id) => {
 
     if (response.status === 200) {
       message.textContent = "Exercise successfully deleted";
-      showJobs();
+      showExercises();
     } else {
       message.textContent = data.msg;
     }
@@ -25,6 +25,6 @@ export const deleteExercise = async (id) => {
   } catch (err) {
     console.log(err);
     message.textContent = "A communications error has occurred.";
-    showJobs();
+    showExercises();
   }
 };
