@@ -4,7 +4,7 @@ Need a user model with name, password, email. All required
 
 Need an exercise model to be able to add an exercise. A string for the name, number for the sets, number for the reps, string for the unit of measurement (lb, kg, miles, etc), number for the measurement.
 
-Need to be able to select from previously entered exercises. On the frontend this would populate a select drodpown element. I think this would be the enum required in the assignment.
+Need to be able to select from previously entered exercises. On the frontend this would populate a select dropdown element. I think this would be the enum required in the assignment.
 
 Exercises can be edited and deleted.
 
