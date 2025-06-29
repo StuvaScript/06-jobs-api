@@ -49,6 +49,16 @@ app.use(helmet());
 app.use(cors());
 app.use(xss());
 
+//* **`` Testing Middleware ``**
+app.use((req, res, next) => {
+  if (req.path == "/multiply") {
+    res.set("Content-Type", "application/json");
+  } else {
+    res.set("Content-Type", "text/html");
+  }
+  next();
+});
+
 //* **`` Routes ``**
 // app.get("/", (req, res) => {
 //   res.send('<h1>Exercise API</h1><a href="/api-docs">Documentation</a>');
